@@ -2,3 +2,5 @@ package: .
 import:
 - package: github.com/graphql-go/graphql
   version: ^0.7.8
+- package: github.com/graphql-go/handler
+  version: ^0.2.3
