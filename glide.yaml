@@ -1,0 +1,4 @@
+package: .
+import:
+- package: github.com/graphql-go/graphql
+  version: ^0.7.8
