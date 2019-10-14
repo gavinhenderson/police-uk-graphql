@@ -1,6 +1,9 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/graphql-go/graphql"
@@ -38,7 +41,7 @@ var queryType = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "Query",
 		Fields: graphql.Fields{
-			"user": &graphql.Field{
+			"gousertest": &graphql.Field{
 				Type: userType,
 				Args: graphql.FieldConfigArgument{
 					"id": &graphql.ArgumentConfig{
@@ -57,6 +60,8 @@ var queryType = graphql.NewObject(
 	})
 
 func main() {
+	_ = importJSONDataFromFile("data.json", &data)
+
 	schema, _ := graphql.NewSchema(graphql.SchemaConfig{
 		Query: queryType,
 	})
@@ -69,4 +74,20 @@ func main() {
 
 	http.Handle("/graphql", h)
 	http.ListenAndServe(":8080", nil)
+}
+
+//Helper function to import json from file to map
+func importJSONDataFromFile(fileName string, result interface{}) (isOK bool) {
+	isOK = true
+	content, err := ioutil.ReadFile(fileName)
+	if err != nil {
+		fmt.Print("Error:", err)
+		isOK = false
+	}
+	err = json.Unmarshal(content, result)
+	if err != nil {
+		isOK = false
+		fmt.Print("Error:", err)
+	}
+	return
 }
